@@ -1,0 +1,31 @@
+{
+  "name": "vue-ssr-todo",
+  "version": "1.0.0",
+  "description": "服务端渲染",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack --config webpack.config.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lushuhao/Vue-SSR-Todo.git"
+  },
+  "author": "lushuhao",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lushuhao/Vue-SSR-Todo/issues"
+  },
+  "homepage": "https://github.com/lushuhao/Vue-SSR-Todo#readme",
+  "dependencies": {
+    "vue": "^2.5.16",
+    "webpack": "^3.10.0"
+  },
+  "devDependencies": {
+    "css-loader": "^0.28.11",
+    "node-sass": "^4.9.0",
+    "sass-loader": "^7.0.1",
+    "vue-loader": "^13.6.0",
+    "vue-template-compiler": "^2.5.16"
+  }
+}
