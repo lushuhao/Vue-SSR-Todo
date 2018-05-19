@@ -9,6 +9,6 @@ const root = document.createElement('div')
 document.body.appendChild(root)
 
 new Vue({
-  el: App,
+  el: root,
   render: h => h(App)
-}).$mount(root)
+})
