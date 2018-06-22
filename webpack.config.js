@@ -1,76 +1,112 @@
 const path = require('path')
+const HTMLPlugin = require('html-webpack-plugin')
 const webpack = require('webpack')
-const htmlPlugin = require('html-webpack-plugin')
+const ExtractPlugin = require('extract-text-webpack-plugin')
 
 const isDev = process.env.NODE_ENV === 'development'
 
 const config = {
-  target: "web",
+  target: 'web',
   entry: path.join(__dirname, 'src/index.js'),
   output: {
-    filename: "bundle.js",
+    filename: 'bundle.[hash:8].js',
     path: path.join(__dirname, 'dist')
   },
   module: {
     rules: [
       {
         test: /\.vue$/,
-        loader: 'vue-loader',
+        loader: 'vue-loader'
       },
       {
-        test: /\.css$/,
-        use: [
-          'style-loader',
-          'css-loader'
-        ]
+        test: /\.jsx$/,
+        loader: 'babel-loader'
       },
       {
-        test: /\.scss$/,
-        use: [
-          'style-loader', // 最后引入到文件中
-          'css-loader', // 再执行
-          'sass-loader' // 先执行，转成css
-        ]
-      },
-      {
-        test: /\.(jpg|jpeg|gif|png|svg)$/,
+        test: /\.(gif|jpg|jpeg|png|svg)$/,
         use: [
           {
             loader: 'url-loader',
             options: {
-              limit: 10000,
-              name: '[name]-url.[ext]'
+              limit: 1024,
+              name: '[name]-aaa.[ext]'
             }
           }
         ]
-
       }
     ]
   },
   plugins: [
-    new webpack.DefinePlugin({ // 定义全局变量，打包时可以访问
+    new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: isDev ? '"development"' : '"production"'
       }
     }),
-    new htmlPlugin()
+    new HTMLPlugin()
   ]
 }
 
 if (isDev) {
+  config.module.rules.push({
+    test: /\.styl/,
+    use: [
+      'style-loader',
+      'css-loader',
+      {
+        loader: 'postcss-loader',
+        options: {
+          sourceMap: true,
+        }
+      },
+      'stylus-loader'
+    ]
+  })
   config.devtool = '#cheap-module-eval-source-map'
   config.devServer = {
-    port: 8888,
-    host: '0.0.0.0', // 可以通过127.0.0.1, 或者本机IP访问，局域网下也可以访问，localhost就不容易做得到
+    port: 8000,
+    host: '0.0.0.0',
     overlay: {
-      error: true // 编译产生错误显示到网页上
+      errors: true,
     },
-    hot: true,
-    clientLogLevel: 'warning'
+    hot: true
   }
   config.plugins.push(
-    new webpack.HotModuleReplacementPlugin()
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoEmitOnErrorsPlugin()
+  )
+} else {
+  config.entry = {
+    app: path.join(__dirname, 'src/index.js'),
+    vendor: ['vue']
+  }
+  config.output.filename = '[name].[chunkhash:8].js'
+  config.module.rules.push(
+    {
+      test: /\.styl/,
+      use: ExtractPlugin.extract({
+        fallback: 'style-loader',
+        use: [
+          'css-loader',
+          {
+            loader: 'postcss-loader',
+            options: {
+              sourceMap: true,
+            }
+          },
+          'stylus-loader'
+        ]
+      })
+    },
+  )
+  config.plugins.push(
+    new ExtractPlugin('styles.[contentHash:8].css'),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor'
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'runtime'
+    })
   )
 }
 
-module.exports = config;
+module.exports = config
