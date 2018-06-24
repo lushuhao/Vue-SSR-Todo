@@ -65,7 +65,7 @@ if (isDev) {
     module: {
       rules: [
         {
-          test: /\.styl/,
+          test: /\.styl|\.vue/,
           use: ExtractPlugin.extract({
             fallback: 'vue-style-loader',
             use: [
