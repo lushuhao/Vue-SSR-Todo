@@ -23,7 +23,10 @@ if (isDev) {
       port: 8000,
       host: '0.0.0.0',
       overlay: {
-        errors: true,
+        errors: true
+      },
+      historyApiFallback: {
+        index: '/index.html'
       },
       hot: true
     },

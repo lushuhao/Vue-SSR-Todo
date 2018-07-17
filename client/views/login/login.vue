@@ -1,6 +1,6 @@
 <template>
   <div class="login">
-
+  login
   </div>
 </template>
 
@@ -8,8 +8,7 @@
   export default {}
 </script>
 
-<style scoped lang="scss" rel="stylesheet/sass">
+<style scoped lang="stylus">
   .login {
-
   }
 </style>
