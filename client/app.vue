@@ -12,7 +12,7 @@
 import Header from './layout/header.vue'
 import Footer from './layout/footer.jsx'
 import Todo from './views/todo/todo.vue'
-import {mapState, mapMutations} from 'vuex'
+import {mapState, mapMutations, mapGetters, mapActions} from 'vuex'
 
 export default {
   components: {
@@ -21,10 +21,12 @@ export default {
     Todo
   },
   computed: {
-    ...mapState(['count'])
+    ...mapState(['count']),
+    ...mapGetters(['fullName'])
   },
   methods: {
-    ...mapMutations(['updateCount'])
+    ...mapMutations(['updateCount']),
+    ...mapActions(['updateCountAsync'])
   }
 }
 </script>
